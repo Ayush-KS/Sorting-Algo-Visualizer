@@ -6,7 +6,7 @@ var sorted = false;
 
 setRandomBars();
 
-function setRandomBars(slowSort) {
+function setRandomBars() {
     heights = [];
     for (let i = 1; i <= barsCount / 2; i++) {
         heights.push(i * 3);
@@ -266,12 +266,51 @@ async function countingSort(heights, min, max)
 
   for (i = min; i <= max; i++) {
       while (count[i]-- > 0) {
+        if(ahead == false)
+            return;
           heights[z++] = i;
           $(bars[z - 1]).height(heights[z - 1]);
           await timer(10);
       }
   }
 return heights;
+}
+
+
+async function bogoSort(heights){
+    var sortedd = false;
+    while(!sortedd){
+        if(ahead == false)
+                return;
+        var count = heights.length, temp, index;
+
+        while(count > 0){
+            if(ahead == false)
+                return;
+            index = Math.floor(Math.random() * count);
+            count--;
+
+            temp = heights[count];
+            heights[count] = heights[index];
+            heights[index] = temp;
+            $(bars[count]).height(heights[count]);
+            $(bars[index]).height(heights[index]);
+            await timer(1);
+        }
+
+        var i = 1;
+        for(; i < heights.length; i++){
+            if(ahead == false)
+                return;
+            if (heights[i-1] > heights[i]) {
+                break;
+            }
+        }
+        if(i == heights.length) {
+            sortedd = true;
+        }
+    }
+    return heights;
 }
 
 //quickSort(heights, 0, heights.length - 1);
@@ -305,6 +344,8 @@ $("#init").click(function(e) {
         cocktailShaker(heights);
     } else if(option == "count") {
         countingSort(heights, 0, 400);
+    } else if(option == "bogo") {
+        bogoSort(heights);
     }
     
     console.log(heights);
