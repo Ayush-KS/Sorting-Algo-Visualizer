@@ -252,6 +252,28 @@ async function cocktailShaker(heights) {
     }
 }
 
+async function countingSort(heights, min, max)
+{
+  var i, z = 0, count = [];
+
+  for (i = min; i <= max; i++) {
+      count[i] = 0;
+  }
+
+  for (i=0; i < heights.length; i++) {
+      count[heights[i]]++;
+  }
+
+  for (i = min; i <= max; i++) {
+      while (count[i]-- > 0) {
+          heights[z++] = i;
+          $(bars[z - 1]).height(heights[z - 1]);
+          await timer(10);
+      }
+  }
+return heights;
+}
+
 //quickSort(heights, 0, heights.length - 1);
 
 //bubbleSort(heights);
@@ -281,8 +303,10 @@ $("#init").click(function(e) {
         radixSortLSD(heights);
     } else if(option == "cocktail") {
         cocktailShaker(heights);
+    } else if(option == "count") {
+        countingSort(heights, 0, 400);
     }
-    $("#shuffle").removeClass('disabled');
+    
     console.log(heights);
 });
 
