@@ -276,7 +276,6 @@ async function countingSort(heights, min, max)
 return heights;
 }
 
-
 async function bogoSort(heights){
     var sortedd = false;
     while(!sortedd){
@@ -313,6 +312,34 @@ async function bogoSort(heights){
     return heights;
 }
 
+async function shellSort(heights) {
+    var increment = heights.length / 2;
+    while (increment > 0) {
+        for (i = increment; i < heights.length; i++) {
+            var j = i;
+            var temp = heights[i];
+    
+            while (j >= increment && heights[j-increment] > temp) {
+                heights[j] = heights[j-increment];
+                $(bars[j]).height(heights[j]);
+                await timer(1);
+                j = j - increment;
+            }
+    
+            heights[j] = temp;
+            $(bars[j]).height(heights[j]);
+            await timer(1);
+        }
+    
+        if (increment == 2) {
+            increment = 1;
+        } else {
+            increment = parseInt(increment*5 / 11);
+        }
+    }
+  return heights;
+}
+
 //quickSort(heights, 0, heights.length - 1);
 
 //bubbleSort(heights);
@@ -346,6 +373,8 @@ $("#init").click(function(e) {
         countingSort(heights, 0, 400);
     } else if(option == "bogo") {
         bogoSort(heights);
+    } else if(option == "shell") {
+        shellSort(heights);
     }
     
     console.log(heights);
