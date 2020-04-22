@@ -316,10 +316,14 @@ async function shellSort(heights) {
     var increment = heights.length / 2;
     while (increment > 0) {
         for (i = increment; i < heights.length; i++) {
+            if(ahead == false)
+                return;
             var j = i;
             var temp = heights[i];
     
             while (j >= increment && heights[j-increment] > temp) {
+                if(ahead == false)
+                    return;
                 heights[j] = heights[j-increment];
                 $(bars[j]).height(heights[j]);
                 await timer(1);
@@ -340,6 +344,28 @@ async function shellSort(heights) {
   return heights;
 }
 
+async function gnomeSort(heights) 
+{
+    for (var j = 1; j < heights.length; j++) 
+    {
+        if (heights[j-1] > heights[j]) {
+            var i = j;
+            for( ; i > 0 && heights[i-1] > heights[i]; i--)
+            {
+                if(ahead == false)
+                    return;
+                var t = heights[i];
+                heights[i] = heights[i-1];
+                heights[i-1] = t;
+                $(bars[i]).height(heights[i]);
+                $(bars[i - 1]).height(heights[i - 1]);
+                await timer(1);
+            }
+        }
+    }
+    return heights;
+}
+
 //quickSort(heights, 0, heights.length - 1);
 
 //bubbleSort(heights);
@@ -349,6 +375,8 @@ async function shellSort(heights) {
 //selectionSort(heights, 0, heights.length - 1);
 
 var ahead = false;
+
+
 
 $("#init").click(function(e) {
     e.preventDefault();
@@ -375,6 +403,8 @@ $("#init").click(function(e) {
         bogoSort(heights);
     } else if(option == "shell") {
         shellSort(heights);
+    } else if(option == "gnome") {
+        gnomeSort(heights);
     }
     
     console.log(heights);
