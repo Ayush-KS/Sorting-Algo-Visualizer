@@ -80,7 +80,7 @@ async function bubbleSort(heights){
       }
     }
     return heights;
- }
+}
 
 // QUICKSORT
 async function quickSort(heights, left, right) {
@@ -147,7 +147,7 @@ async function selectionSort(heights){
       await timer(50);
     }
     return heights;
-  }
+}
 
 // INSERTION SORT
 async function insertionSort(heights){
@@ -157,7 +157,7 @@ async function insertionSort(heights){
       el = heights[i];
       j = i;
   
-      while(j>0 && heights[j-1]>el){
+      while(j>0 && heights[j-1]>el) {
         if(ahead == false)
             return;
         heights[j] = heights[j-1];
@@ -211,7 +211,7 @@ async function insertionSort(heights){
             heights[pos++] = value;
             //console.log(heights[pos - 1]);
             $(bars[pos - 1]).height(heights[pos - 1]);
-            await timer(1);
+            await timer(8);
           }
         }
       }
@@ -378,7 +378,7 @@ async function gnomeSort(heights)
 }
 
 // COMB SORT
-async function combsort(heights)
+async function combSort(heights)
 { 
   var iteration_count = 0;
   var gap = heights.length - 2;
@@ -430,6 +430,97 @@ async function combsort(heights)
   return heights;
 }
 
+// MERGE SORT
+async function mergeSort(heights) 
+{ 
+   var n = heights.length;
+   for (curr_size=1; curr_size<=n-1; curr_size = 2*curr_size) 
+   { 
+       // Pick starting point of different subarrays of current size 
+       for (left_start=0; left_start<n-1; left_start += 2*curr_size) 
+       { 
+           // Find ending point of left subarray. mid+1 is starting  
+           // point of right 
+           var a = left_start + curr_size - 1;
+           var b = n-1;
+           var mid = a < b ? a : b;
+           //var mid = min(left_start + curr_size - 1, n-1); 
+            a = left_start + 2*curr_size - 1;
+            b = n-1;
+            var right_end = a < b ? a : b;
+           //var right_end = min(left_start + 2*curr_size - 1, n-1); 
+
+           var l = left_start;
+           var m = mid;
+           var r = right_end;
+           var i, j, k; 
+            var n1 = m - l + 1; 
+            var n2 =  r - m; 
+          
+            /* create temp arrays */
+            var L = new Array(n1);
+            var R = new Array(n2); 
+          
+            /* Copy data to temp arrays L[] and R[] */
+            for (i = 0; i < n1; i++) 
+                L[i] = heights[l + i]; 
+            for (j = 0; j < n2; j++) 
+                R[j] = heights[m + 1+ j]; 
+          
+            /* Merge the temp arrays back into heights[l..r]*/
+            i = 0; 
+            j = 0; 
+            k = l; 
+            while (i < n1 && j < n2) 
+            { 
+                if(ahead == false)
+                    return;
+                if (L[i] <= R[j]) 
+                { 
+                    heights[k] = L[i]; 
+                    $(bars[k]).height(heights[k]);
+                    await timer(1);
+                    i++; 
+                } 
+                else
+                { 
+                    heights[k] = R[j]; 
+                    $(bars[k]).height(heights[k]);
+                    await timer(1);
+                    j++; 
+                } 
+                k++; 
+            } 
+          
+            /* Copy the remaining elements of L[], if there are any */
+            while (i < n1) 
+            { 
+                if(ahead == false)
+                    return;
+                heights[k] = L[i]; 
+                $(bars[k]).height(heights[k]);
+                await timer(1);
+                i++; 
+                k++; 
+            } 
+          
+            /* Copy the remaining elements of R[], if there are any */
+            while (j < n2) 
+            { 
+                if(ahead == false)
+                    return;
+                heights[k] = R[j]; 
+                $(bars[k]).height(heights[k]);
+                await timer(1);
+                j++; 
+                k++; 
+            }
+       } 
+   } 
+} 
+
+//mergesort(heights);
+//console.log(heights);
 
 var ahead = false;
 
@@ -461,7 +552,9 @@ $("#init").click(function(e) {
     } else if(option == "gnome") {
         gnomeSort(heights);
     } else if(option == "comb") {
-        combsort(heights);
+        combSort(heights);
+    } else if(option == "merge") {
+        mergeSort(heights);
     }
     
     //console.log(heights);
